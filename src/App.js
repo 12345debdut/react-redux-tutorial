@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {connect} from 'react-redux'
+import { increament, decreament } from './action/count';
+class App extends React.Component{
+  state={
+    value:null
+  }
+  render(){
+    return(
+      <div>
+        Count: {this.props.count}
+        <br/>
+        <input onChange={(e)=>{
+          this.setState({value:e.target.value})
+        }}/>
+        <br/>
+        <button onClick={()=>{this.props.increament(this.state.value)}}>Increamnent</button>
+        <button onClick={()=>{this.props.decreament(this.state.value)}}>Decreament</button>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapDispatchToProps=(dispatch)=>{
+  return{
+    increament:(val)=>{
+      increament(dispatch,val&&Number(val))
+    },
+    decreament:(val)=>{
+      decreament(dispatch,val&&Number(val))
+    }
+  }
+}
+
+const mapStateToProps=state=>{
+  return {
+    count:state.count
+  }
+}
+// //redux implementation
+// const temp=mapDispatchToProps
+// temp(dispatch)
+// //redux implementation
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
